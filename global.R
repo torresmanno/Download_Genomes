@@ -1,4 +1,6 @@
-
+list_of_packages <- c("stringr", "RCurl", "R.utils")
+nul <- lapply(list_of_packages, 
+       function(x) if(!require(x,character.only = TRUE)) install.packages(x))
 library(stringr)
 library(RCurl)
 library(R.utils)

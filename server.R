@@ -3,7 +3,7 @@ server <- function(input, output, session) {
     
     Assemblie <- reactive({
       req(input$DataBase)
-      withProgress(expr = "down")
+      withProgress(expr = {
         incProgress(1/6, detail = "downloading")
         if(input$DataBase == "RefSeq"){
           Assemblies <- read.delim(
@@ -14,6 +14,8 @@ server <- function(input, output, session) {
             file = gb.link, sep = "\t", skip = 1, header = T,
             comment.char = "", stringsAsFactors = F )
         }
+        
+      })
     })
     Assemblie.df <- reactive({
         Assemblie <- Assemblie()[Assemblie()$assembly_level %in% input$assembly.lvl,]
@@ -99,6 +101,6 @@ server <- function(input, output, session) {
       
     })
     observeEvent(input$download,{
-      download_genomes(Assemblie.sub.sp(), outpath = input$path)
+      download_genomes(Assemblie.sub.sp(), outpath = "Genomes/")
     })
 }
