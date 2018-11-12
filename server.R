@@ -99,6 +99,6 @@ server <- function(input, output, session) {
       
     })
     observeEvent(input$download,{
-      download_genomes(Assemblie.sub.sp(), outpath = "Genomes/")
+      download_genomes(Assemblie.sub.sp(), outpath = input$path)
     })
 }

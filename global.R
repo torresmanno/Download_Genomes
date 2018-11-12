@@ -5,7 +5,7 @@ library(R.utils)
 
 gb.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt"
 rs.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"
-# rs.link <- "2018_08_07_Assemblies_refseq.txt"
+# rs.link <- "/home/mtm/Escritorio/assembly_summary.txt"
 
 columns <- c(24, 23, 25, 1, 5, 8,11, 12,14,15,16,21)
 Get_phylo <- function(Assembly){

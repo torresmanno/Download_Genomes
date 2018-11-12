@@ -12,6 +12,7 @@ ui <- fluidPage(
             selectInput("DataBase", label = "DataBase", choices = c("Choose"="","RefSeq", "GenBank")),
             selectInput("Genus", "Select the Genus", choices = NULL),
             selectInput("Species", "Select the Species", NULL), 
+            textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
             # fileInput("strains.file", "Or upload the strain list file"),
             # textInput("strain", "Or search by strain name"),
             uiOutput("Table"),
