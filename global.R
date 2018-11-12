@@ -1,36 +1,46 @@
 
 library(stringr)
+library(RCurl)
+library(R.utils)
+
 gb.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt"
 rs.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"
+# rs.link <- "2018_08_07_Assemblies_refseq.txt"
 
+columns <- c(24, 23, 25, 1, 5, 8,11, 12,14,15,16,21)
 Get_phylo <- function(Assembly){
   Assembly$Species <- stringr::word(Assembly$organism_name, 2, 2, sep = " ")
   Assembly$Genera <- stringr::word(Assembly$organism_name, 1, 1, sep = " ")
   return(Assembly)
 }
 
-remove_sym <-function(s){
-  s <- gsub(" ", "_",s)
-  s <- gsub("#", "",s)
-  s <- gsub("/", "_",s)
-  s <- gsub(";.*", "",s)
-  s <- gsub('\\)', "",s)
-  s <- gsub('\\(', "_",s)
-  
-}
 
 get_strain_name <- function(df){
   df$strain <- gsub("strain=", "", df$infraspecific_name) 
-  no.strain.logic <- df$strain == ""
+  no.strain.logic <- (df$strain == ""|df$strain == "n/a" |df$strain == "type strain: N")
   df$strain[no.strain.logic] <- df$isolate[no.strain.logic]
   no.strain.logic <- df$strain == ""
   df$strain[no.strain.logic]  <- df$X..assembly_accession[no.strain.logic]
+  remove_sym <-function(s){
+    s <- gsub(" ", "_",s)
+    s <- gsub("#", "",s)
+    s <- gsub("/", "_",s)
+    s <- gsub(";.*", "",s)
+    s <- gsub('\\)', "",s)
+    s <- gsub('\\(', "_",s)
+    s <- gsub(':', "_",s)
+    
+  }
+  df$strain <- remove_sym(df$strain)
   return(df)
 }
 
 remove.dup <- function(df){
   dup.df <- df[df$strain %in% df$strain[duplicated(df$strain)],]
-  dup <- sapply(unique(dup.df$strain), function(s) dup.df[dup.df$strain == s,],USE.NAMES = T, simplify = F)
+  dup.l <- lapply(unique(dup.df$Genera), function(g) dup.df[dup.df$Genera == g,])
+  dup.df2 <- do.call(rbind, lapply(dup.l, function(d) d[d$strain %in% d$strain[duplicated(d$strain)],]))
+  
+  dup <- sapply(unique(dup.df2$strain), function(s) dup.df2[dup.df2$strain == s,],USE.NAMES = T, simplify = F)
   
   best.candidate <- sapply(dup, function(d){
     b.c <- d$X..assembly_accession[d$refseq_category != "na"]
@@ -50,7 +60,7 @@ remove.dup <- function(df){
     return(b.c)
   })
   
-  dup.str <- dup.df$X..assembly_accession
+  dup.str <- dup.df2$X..assembly_accession
   str.to.remove <- dup.str[!dup.str %in% best.candidate]
   
   return(df[!df$X..assembly_accession %in% str.to.remove, ])
@@ -64,9 +74,7 @@ Get.length <- function(str.list){
 }
 
 download_genomes <- function(df, type = "genome", outpath){
-  library(stringr)
-  library(RCurl)
-  library(R.utils)
+
   dir.create(outpath, showWarnings = F, recursive = T)
   url.base <- df$ftp_path
   url.file <- strsplit(as.character(url.base), "/")
