@@ -12,6 +12,8 @@ ui <- fluidPage(
             selectInput("DataBase", label = "DataBase", choices = c("Choose"="","RefSeq", "GenBank")),
             selectInput("Genus", "Select the Genus", choices = NULL),
             selectInput("Species", "Select the Species", NULL), 
+            # TODO: Add nucleotid protein or CDS options
+            selectInput("seq", label = "Sequence", choices = c("Genomic"="genome","Protein"="protein", "CDS"="rna"),selected = "Genomic"),
             textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
             # fileInput("strains.file", "Or upload the strain list file"),
             # textInput("strain", "Or search by strain name"),
