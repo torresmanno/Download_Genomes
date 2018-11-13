@@ -10,16 +10,22 @@ ui <- fluidPage(
             titlePanel("Download Genomes"),
             checkboxGroupInput("assembly.lvl","Assembly Level",choices = c("Complete Genome", "Chromosome","Scaffold","Contig"), selected = c("Complete Genome")),
             selectInput("DataBase", label = "DataBase", choices = c("Choose"="","RefSeq", "GenBank")),
+            # splitLayout(
+            #     fileInput("inTable", label = "Or upload an Assembly Table"),
+            #     checkboxInput("skip1", "Skip first line?", TRUE)
+            # ),
             selectInput("Genus", "Select the Genus", choices = NULL),
             selectInput("Species", "Select the Species", NULL), 
-            # TODO: Add nucleotid protein or CDS options
-            selectInput("seq", label = "Sequence", choices = c("Genomic"="genome","Protein"="protein", "CDS"="rna"),selected = "Genomic"),
-            textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
+            downloadButton("downTable", "Download Table"),
+            selectInput("seq", label = "Sequence", choices = c("Genomic"="genome","Protein"="protein", "CDS"="rna", "Feature" = "feature"),selected = "Genomic"),
+            splitLayout(
+                textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
+                actionButton("download", "Download")
+            ),
             # fileInput("strains.file", "Or upload the strain list file"),
             # textInput("strain", "Or search by strain name"),
             uiOutput("Table"),
-            uiOutput("strain.list"),
-            actionButton("download", "Download")
+            uiOutput("strain.list")
         ),
         mainPanel(
             dataTableOutput(outputId = "plot.Table")

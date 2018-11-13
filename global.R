@@ -90,6 +90,9 @@ download_genomes <- function(df, type = "genome", outpath){
   }else if(type == "rna"){
     Genome.file <-paste0(outpath, "/", df$strain, "_rna_from_genomic.fna.gz")
     url.genome <-paste0(url.base, "/", url.file, "_rna_from_genomic.fna.gz")
+  }else if(type == "feature"){
+    Genome.file <-paste0(outpath, "/", df$strain, "_feature_table.txt.gz")
+    url.genome <-paste0(url.base, "/", url.file, "_feature_table.txt.gz")
   }
   for (i in seq_along(url.file)){
     if(!file.exists(gsub(".gz", "",Genome.file[i]))){
