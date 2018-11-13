@@ -16,7 +16,7 @@ ui <- fluidPage(
             # ),
             selectInput("Genus", "Select the Genus", choices = NULL),
             selectInput("Species", "Select the Species", NULL), 
-            downloadButton("downTable", "Download Table"),
+            # downloadButton("downTable", "Download Table"),
             selectInput("seq", label = "Sequence", choices = c("Genomic"="genome","Protein"="protein", "CDS"="rna", "Feature" = "feature"),selected = "Genomic"),
             splitLayout(
                 textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
