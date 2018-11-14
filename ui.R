@@ -10,16 +10,20 @@ ui <- fluidPage(
             titlePanel("Download Genomes"),
             checkboxGroupInput("assembly.lvl","Assembly Level",choices = c("Complete Genome", "Chromosome","Scaffold","Contig"), selected = c("Complete Genome")),
             selectInput("DataBase", label = "DataBase", choices = c("Choose"="","RefSeq", "GenBank")),
-            # splitLayout(
-            #     fileInput("inTable", label = "Or upload an Assembly Table"),
-            #     checkboxInput("skip1", "Skip first line?", TRUE)
-            # ),
-            selectInput("Genus", "Select the Genus", choices = NULL),
-            selectInput("Species", "Select the Species", NULL), 
-            # downloadButton("downTable", "Download Table"),
+            splitLayout(
+                fileInput("inTable", label = "Or upload an Assembly Table"),
+                verticalLayout(
+                    checkboxInput("skip1", "Skip first line?", TRUE)
+                    # actionButton("removefile", "Remove File")
+                )
+            ),
+            # fileInput("inTable.parsed", label = "Or upload final table with wanted strains"),
+            selectInput("Genus", "Genus", choices = NULL),
+            selectInput("Species", "Species", NULL),
+            downloadButton("downTable", "Download Table"),
             selectInput("seq", label = "Sequence", choices = c("Genomic"="genome","Protein"="protein", "CDS"="rna", "Feature" = "feature"),selected = "Genomic"),
             splitLayout(
-                textInput("path", "Download_Path",value = "~/Descargas/Genomes/"),
+                textInput("path", "Download_Path",value = 'C:\\Users\\'),
                 actionButton("download", "Download")
             ),
             # fileInput("strains.file", "Or upload the strain list file"),

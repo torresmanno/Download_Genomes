@@ -4,7 +4,7 @@ nul <- lapply(list_of_packages,
 library(stringr)
 library(RCurl)
 library(R.utils)
-
+options(shiny.maxRequestSize=50*1024^2) 
 gb.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/bacteria/assembly_summary.txt"
 rs.link <- "ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt"
 # rs.link <- "~/Desktop/assembly_summary.txt"
@@ -16,7 +16,12 @@ Get_phylo <- function(Assembly){
   return(Assembly)
 }
 
-
+parse.assemb.table <- function(df, ass.lvl){
+  Assemblie <- df[df$assembly_level %in% ass.lvl,]
+  Assemblie <- Get_phylo(Assemblie)
+  Assemblie <- get_strain_name(Assemblie)
+  remove.dup(Assemblie)
+}
 get_strain_name <- function(df){
   df$strain <- gsub("strain=", "", df$infraspecific_name) 
   no.strain.logic <- (df$strain == ""|df$strain == "n/a" |df$strain == "type strain: N")
