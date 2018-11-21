@@ -10,12 +10,10 @@ ui <- fluidPage(
             titlePanel("Download Genomes"),
             checkboxGroupInput("assembly.lvl","Assembly Level",choices = c("Complete Genome", "Chromosome","Scaffold","Contig"), selected = c("Complete Genome")),
             selectInput("DataBase", label = "DataBase", choices = c("Choose"="","RefSeq", "GenBank")),
-            fluidRow(
                 fileInput("inTable", label = "Or upload an Assembly Table"),
                 div(style = "margin-top:-2em; margin-bottom:2em",
                 checkboxInput("skip1", "Skip first line?", TRUE)
-                )
-            ),
+                ),
             # fileInput("inTable.parsed", label = "Or upload final table with wanted strains"),
             selectInput("Genus", "Genus", choices = NULL),
             selectInput("Species", "Species", NULL),
